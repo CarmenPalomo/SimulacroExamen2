@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 /**
  * Clase que representa un personaje en el juego.
  *
@@ -42,14 +44,29 @@ class Personaje(
     private var ataque: Int
     private var experiencia: Int
     private var nivel: Int
+    private var suerte: Int
+    private var fuerza: Int
+    private var destreza: Int
+    private var constitucion: Int
+    private var inteligencia: Int
+    private var sabiduria: Int
+    private var carisma: Int
     enum class Raza { Humano, Elfo, Enano, Maldito }
     enum class Clase { Brujo, Mago, Guerrero }
+    enum class Edad { Anciano, Adulto, Joven }
 
     init {
         salud = 100
         ataque = 10
         experiencia = 0
         nivel = 1
+        suerte = (0..10).random()
+        fuerza = 0
+        destreza = 0
+        constitucion = 0
+        inteligencia = 0
+        sabiduria = 0
+        carisma = 0
     }
 
     fun getNombre(): String {
@@ -150,6 +167,235 @@ class Personaje(
             println("${monstruo.getNombre()} ataca a ${nombre}. Salud de ${nombre}: ${vidaPersonaje}")
         }
     }
+    fun comunicacion(frase: String, edad: Edad): String {
+        when (edad) {
+            Edad.Joven -> {
+                if (frase.first() == '¿' && frase.last() == '?' && frase.uppercase() == frase) {
+                    return "Tranqui, se lo que hago"
+                } else if (frase.uppercase() == frase) {
+                    return "Eh, relajate"
+                } else if (frase.first() == '¿' && frase.last() == '?') {
+                    return "De lujo"
+                } else if (frase == nombre) {
+                    return "¿Que pasa?"
+                } else if(frase == "Hasta la proxima luchadores") {
+                    return "Un placer servirle"
+                }else{
+                    return "Yo que se"
+                }
+            }
+
+            Edad.Adulto -> {
+                if (frase.first() == '¿' && frase.last() == '?' && frase.uppercase() == frase) {
+                    return "Estoy buscando la mejor solucion"
+                } else if (frase.uppercase() == frase) {
+                    return "No me levantes la voz mequetrefe"
+                } else if (frase.first() == '¿' && frase.last() == '?') {
+                    return "En la flor de la vida, pero me empieza a doler la espalda"
+                } else if (frase == nombre) {
+                    return "¿Necesitas algo?"
+                } else if(frase == "Hasta la proxima luchadores") {
+                    return "Un placer servirle"
+                }else{
+                    return "No se de que me estas hablando"
+                }
+            }
+
+            Edad.Anciano -> {
+                if (frase.first() == '¿' && frase.last() == '?' && frase.uppercase() == frase) {
+                    return "Que no te escucho!"
+                } else if (frase.uppercase() == frase) {
+                    return "Hablame mas alto que no te escucho"
+                } else if (frase.first() == '¿' && frase.last() == '?') {
+                    return "No me puedo mover"
+                } else if (frase == nombre) {
+                    return "Las 5 de la tarde"
+                } else if(frase == "Hasta la proxima luchadores") {
+                    return "Un placer servirle"
+                }else{
+                    return "En mis tiempos esto no pasaba"
+                }
+
+            }
+        }
+    }
+
+    fun habilidad() {
+        when (clase) {
+            Clase.Mago -> {
+                calcularSalud()
+            }
+
+            Clase.Brujo -> {
+                ataque *= 2
+            }
+
+            Clase.Guerrero -> {
+                suerte *= 2
+            }
+
+        }
+
+    }
+
+    /*fun vida(){
+        var tirada1 : Dado
+        var tirada2 : Dado
+        var tirada3 : Dado
+        var tirada4 : Dado
+        when(raza){
+            Raza.Humano ->{
+                tirada1 = Dado()
+                tirada2 = Dado()
+                tirada3 = Dado()
+                tirada4 = Dado()
+                if (tirada1 < tirada2 && tirada1 < tirada3 && tirada1 < tirada4 ){
+                    fuerza = tirada2 + tirada3 + tirada4
+
+                }
+
+
+            }
+            Raza.Elfo->{
+
+            }
+            Raza.Maldito ->{
+
+            }
+            Raza.Enano ->{
+
+            }
+        }
+    }*/
+
+    fun Combate( jugador1 : Personaje, jugador2: Personaje){
+        var tirada1 : Dado
+        var tirada2 : Dado
+        var rondas = 0
+        var i = 0
+        var vida_resultante = 0
+        while (jugador1.salud > 0 || jugador2.salud > 0){
+            println("Ronda $i")
+            tirada1 = Dado()
+            tirada2 = Dado()
+
+            if (i == 1){
+                if (tirada1 > tirada2){
+                    println("El jugador $jugador1 ha ganado la primera ronda")
+                }else{
+                    println("El jugador $jugador2 ha ganado la primera ronda")
+                }
+
+            }else{
+                if (tirada1 > tirada2){
+                    var suma1 = (jugador1.fuerza + jugador1.destreza) * 0,2
+                    var suma2 = (jugador2.constitucion + jugador2.inteligencia) * 0,1
+                    vida_resultante = jugador2.salud - (suma1 - suma2)
+                    if (vida_resultante < 0 ){
+                        println("$jugador1 ha fallado el golpe")
+                    }else{
+                        jugador2.salud = jugador2.salud - vida_resultante
+                    }
+                }
+            }
+
+
+
+
+        }
+
+
+
+    }
+
+    fun cifrado(mensaje: String, numero: Int) {
+        when (raza) {
+            Raza.Humano -> {
+
+            }
+
+            Raza.Maldito -> {
+                var respuesta = mensaje.lowercase().toCharArray()
+                var abecedario = arrayOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+                var x = 0
+                var salir = false
+                for (i in 0..respuesta.size - 1) {
+                    while (x < abecedario.size && !salir) {
+                        if (respuesta[i] == ' ') {
+                            salir = true
+                        } else if (respuesta[i] == abecedario[x]) {
+                            respuesta[i] = abecedario[(x + numero) % abecedario.size]
+                            salir = true
+                        }
+                        x += 1
+                    }
+                    x = 0
+                    salir = false
+                }
+                println(respuesta)
+                //descifrado
+                for (i in 0..respuesta.size - 1) {
+                    while (x < abecedario.size && !salir) {
+                        if (respuesta[i] == ' ') {
+                            salir = true
+                        } else if (respuesta[i] == abecedario[x]) {
+                            respuesta[i] = abecedario[(x - numero) % abecedario.size]
+                            salir = true
+                        }
+                        x += 1
+                    }
+                    x = 0
+                    salir = false
+                }
+                println(respuesta)
+
+            }
+
+            Raza.Enano -> {
+                println(mensaje.uppercase())
+            }
+
+            Raza.Elfo -> {
+                var respuesta = mensaje.toCharArray()
+                var abecedario = arrayOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+                var x = 0
+                var salir = false
+                //cifrado
+                for (i in 0..respuesta.size - 1) {
+                    while (x < abecedario.size && !salir) {
+                        if (respuesta[i] == ' ') {
+                            salir = true
+                        } else if (respuesta[i] == abecedario[x]) {
+                            respuesta[i] = abecedario[(x + numero) % abecedario.size]
+                            salir = true
+                        }
+                        x += 1
+                    }
+                    x = 0
+                    salir = false
+                }
+                println(respuesta)
+                //descifrado
+                for (i in 0..respuesta.size - 1) {
+                    while (x < abecedario.size && !salir) {
+                        if (respuesta[i] == ' ') {
+                            salir = true
+                        } else if (respuesta[i] == abecedario[x]) {
+                            respuesta[i] = abecedario[(x - numero) % abecedario.size]
+                            salir = true
+                        }
+                        x += 1
+                    }
+                    x = 0
+                    salir = false
+                }
+                println(respuesta)
+
+            }
+        }
+
+    }
+
 
     override fun toString(): String {
         return "Personaje: Nombre: $nombre, Nivel: $nivel, Salud: $salud, Ataque: $ataque, Raza: $raza, Clase: $clase"
