@@ -269,15 +269,15 @@ class Personaje(
     }*/
 
     fun Combate( jugador1 : Personaje, jugador2: Personaje){
-        var tirada1 : Dado
-        var tirada2 : Dado
+        var tirada1 : Int
+        var tirada2 : Int
         var rondas = 0
         var i = 0
         var vida_resultante = 0
         while (jugador1.salud > 0 || jugador2.salud > 0){
             println("Ronda $i")
-            tirada1 = Dado()
-            tirada2 = Dado()
+            tirada1 = Dado().tirada()
+            tirada2 = Dado().tirada()
 
             if (i == 1){
                 if (tirada1 > tirada2){
@@ -288,9 +288,9 @@ class Personaje(
 
             }else{
                 if (tirada1 > tirada2){
-                    var suma1 = (jugador1.fuerza + jugador1.destreza) * 0,2
-                    var suma2 = (jugador2.constitucion + jugador2.inteligencia) * 0,1
-                    vida_resultante = jugador2.salud - (suma1 - suma2)
+                    var suma1 = (jugador1.fuerza + jugador1.destreza) * 0.2
+                    var suma2 = (jugador2.constitucion + jugador2.inteligencia) * 0.1
+                    vida_resultante = (jugador2.salud - (suma1 - suma2)).toInt()
                     if (vida_resultante < 0 ){
                         println("$jugador1 ha fallado el golpe")
                     }else{
@@ -298,14 +298,7 @@ class Personaje(
                     }
                 }
             }
-
-
-
-
         }
-
-
-
     }
 
     fun cifrado(mensaje: String, numero: Int) {
