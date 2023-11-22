@@ -36,9 +36,9 @@ import kotlin.random.Random
  * - toString(): Genera una representación en texto del personaje.
  */
 class Personaje(
-    private var nombre: String,
-    private val raza: Raza,
-    private var clase: Clase
+        private var nombre: String,
+        private val raza: Raza,
+        private var clase: Clase
 ) {
     private var salud: Int
     private var ataque: Int
@@ -51,6 +51,9 @@ class Personaje(
     private var inteligencia: Int
     private var sabiduria: Int
     private var carisma: Int
+    private var vida: Int
+    private var batallasGandas: Int
+
     enum class Raza { Humano, Elfo, Enano, Maldito }
     enum class Clase { Brujo, Mago, Guerrero }
     enum class Edad { Anciano, Adulto, Joven }
@@ -67,38 +70,51 @@ class Personaje(
         inteligencia = 0
         sabiduria = 0
         carisma = 0
+        vida = 0
+        batallasGandas = 0
+
     }
 
     fun getNombre(): String {
         return nombre
     }
+
     fun setNombre(nuevoNombre: String) {
         nombre = nuevoNombre
     }
+
     fun getRaza(): Raza {
         return raza
     }
+
     fun getSalud(): Int {
         return salud
     }
+
     fun setSalud(nuevaSalud: Int) {
         salud = nuevaSalud
     }
+
     fun getAtaque(): Int {
         return ataque
     }
+
     fun setAtaque(nuevoAtaque: Int) {
         ataque = nuevoAtaque
     }
+
     fun getClase(): Clase {
         return clase
     }
+
     fun setClase(nuevaClase: Clase) {
         clase = nuevaClase
     }
+
     fun getExperiencia(): Int {
         return experiencia
     }
+
     fun setExperiencia(experienciaGanada: Int) {
         experiencia += experienciaGanada
         while (experiencia >= 1000) {
@@ -106,9 +122,11 @@ class Personaje(
             experiencia -= 1000 // Reducir la experiencia en 1000 al subir de nivel
         }
     }
+
     fun getNivel(): Int {
         return nivel
     }
+
     fun subirNivel() {
         if (nivel < 10) { // Limitar el nivel a 10
             nivel++
@@ -116,6 +134,7 @@ class Personaje(
             calcularAtaque() // Calcular el nuevo valor de ataque al subir de nivel
         }
     }
+
     private fun calcularSalud() {
         salud = when (nivel) {
             1 -> 100
@@ -167,6 +186,7 @@ class Personaje(
             println("${monstruo.getNombre()} ataca a ${nombre}. Salud de ${nombre}: ${vidaPersonaje}")
         }
     }
+
     fun comunicacion(frase: String, edad: Edad): String {
         when (edad) {
             Edad.Joven -> {
@@ -178,9 +198,9 @@ class Personaje(
                     return "De lujo"
                 } else if (frase == nombre) {
                     return "¿Que pasa?"
-                } else if(frase == "Hasta la proxima luchadores") {
+                } else if (frase == "Hasta la proxima luchadores") {
                     return "Un placer servirle"
-                }else{
+                } else {
                     return "Yo que se"
                 }
             }
@@ -194,9 +214,9 @@ class Personaje(
                     return "En la flor de la vida, pero me empieza a doler la espalda"
                 } else if (frase == nombre) {
                     return "¿Necesitas algo?"
-                } else if(frase == "Hasta la proxima luchadores") {
+                } else if (frase == "Hasta la proxima luchadores") {
                     return "Un placer servirle"
-                }else{
+                } else {
                     return "No se de que me estas hablando"
                 }
             }
@@ -210,9 +230,9 @@ class Personaje(
                     return "No me puedo mover"
                 } else if (frase == nombre) {
                     return "Las 5 de la tarde"
-                } else if(frase == "Hasta la proxima luchadores") {
+                } else if (frase == "Hasta la proxima luchadores") {
                     return "Un placer servirle"
-                }else{
+                } else {
                     return "En mis tiempos esto no pasaba"
                 }
 
@@ -238,67 +258,207 @@ class Personaje(
 
     }
 
-    /*fun vida(){
-        var tirada1 : Dado
-        var tirada2 : Dado
-        var tirada3 : Dado
-        var tirada4 : Dado
+    fun CalculoVida(){
+        var tirada1 : Int
+        var tirada2 : Int
+        var tirada3 : Int
+        var tirada4 : Int
+        var suma : Int
+        var varibale: Int
+        var habilidades: MutableList<Int> = mutableListOf(fuerza,destreza,constitucion,inteligencia
+        ,sabiduria,carisma)
         when(raza){
-            Raza.Humano ->{
-                tirada1 = Dado()
-                tirada2 = Dado()
-                tirada3 = Dado()
-                tirada4 = Dado()
-                if (tirada1 < tirada2 && tirada1 < tirada3 && tirada1 < tirada4 ){
-                    fuerza = tirada2 + tirada3 + tirada4
+            Raza.Humano -> {
 
+                for (i in 0..habilidades.size){
+                    tirada1 = Dado().tirada()
+                    tirada2 = Dado().tirada()
+                    tirada3 = Dado().tirada()
+                    tirada4 = Dado().tirada()
+
+                    if (tirada1 < tirada2 && tirada1 < tirada3 && tirada1 < tirada4) {
+                        suma = tirada2 + tirada3 + tirada4
+                    } else if (tirada2 < tirada3 && tirada2 < tirada4){
+                        suma = tirada1 + tirada3 + tirada4
+                    } else if (tirada3 < tirada4){
+                        suma = tirada1 + tirada2 + tirada4
+                    }else{
+                        suma = tirada1 + tirada2 + tirada3
+                    }
+                    varibale = habilidades[i]
+
+                    if (varibale == fuerza || varibale == destreza || varibale == constitucion || varibale == inteligencia){
+                        varibale = suma + 5
+                    }else{
+                        varibale = suma
+                    }
                 }
 
-
+                vida = (10 +(constitucion -10)/2).toInt()
             }
             Raza.Elfo->{
+                for (i in 0..habilidades.size){
+                    tirada1 = Dado().tirada()
+                    tirada2 = Dado().tirada()
+                    tirada3 = Dado().tirada()
+                    tirada4 = Dado().tirada()
+
+                    if (tirada1 < tirada2 && tirada1 < tirada3 && tirada1 < tirada4) {
+                        suma = tirada2 + tirada3 + tirada4
+                    } else if (tirada2 < tirada3 && tirada2 < tirada4){
+                        suma = tirada1 + tirada3 + tirada4
+                    } else if (tirada3 < tirada4){
+                        suma = tirada1 + tirada2 + tirada4
+                    }else{
+                        suma = tirada1 + tirada2 + tirada3
+                    }
+                    varibale = habilidades[i]
+
+                    if (varibale == sabiduria || varibale == destreza || varibale == inteligencia){
+                        varibale = suma + 5
+                    }else{
+                        varibale = suma
+                    }
+                }
+
+                vida = (10 +(constitucion -10)/2).toInt()
 
             }
             Raza.Maldito ->{
+                for (i in 0..habilidades.size){
+                    tirada1 = Dado().tirada()
+                    tirada2 = Dado().tirada()
+                    tirada3 = Dado().tirada()
+                    tirada4 = Dado().tirada()
+
+                    if (tirada1 < tirada2 && tirada1 < tirada3 && tirada1 < tirada4) {
+                        suma = tirada2 + tirada3 + tirada4
+                    } else if (tirada2 < tirada3 && tirada2 < tirada4){
+                        suma = tirada1 + tirada3 + tirada4
+                    } else if (tirada3 < tirada4){
+                        suma = tirada1 + tirada2 + tirada4
+                    }else{
+                        suma = tirada1 + tirada2 + tirada3
+                    }
+                    varibale = habilidades[i]
+
+                    if (varibale == destreza || varibale == fuerza || varibale == carisma ){
+                        varibale = suma + 5
+                    }else{
+                        varibale = suma
+                    }
+                }
+
+                vida = (10 +(constitucion -10)/2).toInt()
 
             }
             Raza.Enano ->{
+                for (i in 0..habilidades.size){
+                    tirada1 = Dado().tirada()
+                    tirada2 = Dado().tirada()
+                    tirada3 = Dado().tirada()
+                    tirada4 = Dado().tirada()
+
+                    if (tirada1 < tirada2 && tirada1 < tirada3 && tirada1 < tirada4) {
+                        suma = tirada2 + tirada3 + tirada4
+                    } else if (tirada2 < tirada3 && tirada2 < tirada4){
+                        suma = tirada1 + tirada3 + tirada4
+                    } else if (tirada3 < tirada4){
+                        suma = tirada1 + tirada2 + tirada4
+                    }else{
+                        suma = tirada1 + tirada2 + tirada3
+                    }
+                    varibale = habilidades[i]
+
+                    if (varibale == fuerza || varibale == constitucion || varibale == destreza){
+                        varibale = suma + 5
+                    }else{
+                        varibale = suma
+                    }
+                }
+
+                vida = (10 +(constitucion -10)/2).toInt()
 
             }
         }
-    }*/
+    }
 
-    fun Combate( jugador1 : Personaje, jugador2: Personaje){
-        var tirada1 : Int
-        var tirada2 : Int
+    fun Combate(jugador1: Personaje, jugador2: Personaje) {
+        var tirada1: Int
+        var tirada2: Int
         var rondas = 0
         var i = 0
         var vida_resultante = 0
-        while (jugador1.salud > 0 || jugador2.salud > 0){
+        while (jugador1.vida > 0 || jugador2.vida > 0) {
             println("Ronda $i")
             tirada1 = Dado().tirada()
             tirada2 = Dado().tirada()
 
-            if (i == 1){
-                if (tirada1 > tirada2){
+            if (i == 1) {
+                if (tirada1 > tirada2) {
                     println("El jugador $jugador1 ha ganado la primera ronda")
-                }else{
+
+                } else {
                     println("El jugador $jugador2 ha ganado la primera ronda")
                 }
 
-            }else{
-                if (tirada1 > tirada2){
-                    var suma1 = (jugador1.fuerza + jugador1.destreza) * 0.2
-                    var suma2 = (jugador2.constitucion + jugador2.inteligencia) * 0.1
-                    vida_resultante = (jugador2.salud - (suma1 - suma2)).toInt()
-                    if (vida_resultante < 0 ){
-                        println("$jugador1 ha fallado el golpe")
-                    }else{
-                        jugador2.salud = jugador2.salud - vida_resultante
+            } else {
+                if (tirada1 > tirada2) {
+                    vida_resultante = ((jugador1.fuerza + jugador1.destreza) * 0.2 - (jugador2.constitucion + jugador2.inteligencia) * 0.1).toInt()
+
+                    var suma = jugador2.carisma + jugador2.sabiduria
+                    if (suma > 20) {
+                        var tirada3 = Dado().tirada()
+                        if (tirada3 == 4 || tirada3 == 5 || tirada3 == 6) {
+                            println("EL jugador $jugador2 ha esquivado el ataque")
+                        }
+                    }
+
+                    if (vida_resultante < 0) {
+                        println("EL $jugador1 ha fallado")
+                    } else {
+                        jugador2.vida = jugador2.vida - vida_resultante
+                    }
+
+
+                } else {
+
+                    if (tirada2 > tirada1) {
+                        vida_resultante = ((jugador2.fuerza + jugador2.destreza) * 0.2 - (jugador1.constitucion + jugador1.inteligencia) * 0.1).toInt()
+
+                        var suma = jugador1.carisma + jugador1.sabiduria
+                        if (suma > 20) {
+                            var tirada3 = Dado().tirada()
+                            if (tirada3 == 4 || tirada3 == 5 || tirada3 == 6) {
+                                println("EL jugador $jugador1 ha esquivado el ataque")
+                            }
+                        }
+
+                        if (vida_resultante < 0) {
+                            println("EL $jugador2 ha fallado")
+                        } else {
+                            jugador1.vida = jugador1.vida - vida_resultante
+                        }
+
                     }
                 }
             }
         }
+
+        if (jugador1.salud > 0){
+            jugador1.batallasGandas += 1
+            println("El jugador $jugador1 ha ganado $batallasGandas batallas")
+            var recomensa =  Articulo("objeto1", 135, 1)
+            Mochila(1).addArticulo(recomensa)
+
+
+        } else{
+            jugador2.batallasGandas += 1
+            println("El jugador $jugador1 ha ganado $batallasGandas batallas")
+            var recomensa =  Articulo("objeto1", 135, 1)
+            Mochila(1).addArticulo(recomensa)
+        }
+
     }
 
     fun cifrado(mensaje: String, numero: Int) {
@@ -393,5 +553,6 @@ class Personaje(
     override fun toString(): String {
         return "Personaje: Nombre: $nombre, Nivel: $nivel, Salud: $salud, Ataque: $ataque, Raza: $raza, Clase: $clase"
     }
+
 
 }
